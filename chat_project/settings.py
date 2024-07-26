@@ -23,10 +23,11 @@ BASE_DIR = Path(__file__).resolve().parent.parent
 SECRET_KEY = 'django-insecure-^ajok_78*8)j883v4)r1r!(^3jeb9vc4sl2$2q-y(cluqt#op*'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = False
+DEBUG = True
 
 
-ALLOWED_HOSTS = ['your-heroku-app.herokuapp.com']
+AALLOWED_HOSTS = ['chat_kns.vercel.app', 'localhost']
+
 
 
 
