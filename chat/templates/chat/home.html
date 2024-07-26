@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chat/styles.css' %}">  <!-- Link to your CSS file if any -->
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            text-align: center;
+            padding: 50px;
+        }
+        .welcome {
+            font-size: 24px;
+            margin-bottom: 20px;
+        }
+        .navigation {
+            margin-top: 20px;
+        }
+        .navigation a {
+            text-decoration: none;
+            color: #007bff;
+            margin: 0 10px;
+            font-size: 18px;
+        }
+        .navigation a:hover {
+            text-decoration: underline;
+        }
+    </style>
+</head>
+<body>
+    <div class="welcome">
+        <h1>Welcome to the Chat Application!</h1>
+        <p>Your one-stop solution for chatting with friends.</p>
+    </div>
+
+    <div class="navigation">
+        <a href="{% url 'index' %}">Home</a>
+        <a href="{% url 'user_list' %}">Users</a>
+        <a href="{% url 'chat_view' user.username %}">Chat</a>  <!-- Update 'your_username' -->
+        <a href="{% url 'message_list_create' %}">Messages</a>
+    </div>
+</body>
+</html>

@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chat</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chat/chat.css' %}">
+    <script>
+        const user = "{{ user.username }}";
+        const username = "{{ username }}";
+        const roomName = 'chat_' + username;
+        const ws = new WebSocket('ws://' + window.location.host + '/ws/chat/' + username + '/');
+
+        ws.onmessage = function(e) {
+            location.reload();
+        };
+
+       
+
+
+        document.addEventListener("DOMContentLoaded", function() {
+            var messagesContainer = document.getElementById("messages");
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        });
+
+        function scrollToBottom() {
+            var messagesContainer = document.getElementById("messages");
+            messagesContainer.scrollTop = messagesContainer.scrollHeight;
+        }
+    </script>
+</head>
+<body>
+    
+    <div class="navbar">
+        <a href="{% url 'index' %}">Home</a>
+        {% if user.is_authenticated %}
+            <a href="{% url 'user_list' %}">Users</a>
+            <a href="{% url 'chat_view' user.username %}">Chat</a>
+            
+            <form action="{% url 'logout' %}" method="post">
+                {% csrf_token %}
+                <button type="submit">Logout</button>
+            </form>
+        {% else %}
+            <a href="{% url 'login' %}">Login</a>
+            <a href="{% url 'register' %}">Register</a>
+        {% endif %}
+    </div>
+    
+    <div class="container">
+        <h1>Chat with {{ username }}</h1>
+        <div class="chat-box">
+            <div id="messages" class="messages">
+                {% for message in messages %}
+                    <div class="message {% if message.sender == user %}sent{% else %}received{% endif %}">
+                        {{ message.content }}<br>
+                        <small>{{ message.timestamp }}</small>
+                    </div>
+                {% endfor %}
+            </div>
+            <div class="form-container">
+                <form method="post" onsubmit="scrollToBottom()">
+                    {% csrf_token %}
+                    {{ form.as_p }}
+                    <button type="submit">Send</button>
+                </form>
+            </div>
+        </div>
+    </div>
+</body>
+</html>

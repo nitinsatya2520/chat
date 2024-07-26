@@ -1,0 +1,13 @@
+{% extends 'chat/base.html' %}
+
+{% block title %}Home{% endblock %}
+
+{% block content %}
+<h1>Welcome to the Chat Application</h1>
+<p>Your one-stop solution for chatting with friends.</p>
+<ul class="user-list">
+    {% for user in users %}
+        <li><a href="{% url 'chat_view' user.username %}">{{ user.username }}</a></li>
+    {% endfor %}
+</ul>
+{% endblock %}

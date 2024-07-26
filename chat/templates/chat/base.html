@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html lang="en">
+<script>
+        function includeHTML() {
+          var z, i, elmnt, file, xhttp;
+          /*loop through a collection of all HTML elements:*/
+          z = document.getElementsByTagName("*");
+          for (i = 0; i < z.length; i++) {
+            elmnt = z[i];
+            /*search for elements with a certain attribute:*/
+            file = elmnt.getAttribute("w3-include-html");
+            if (file) {
+              /*make an HTTP request using the attribute value as the file name:*/
+              xhttp = new XMLHttpRequest();
+              xhttp.onreadystatechange = function() {
+                if (this.readyState == 4) {
+                  if (this.status == 200) {elmnt.innerHTML = this.responseText;}
+                  if (this.status == 404) {elmnt.innerHTML = "Page not found.";}
+                  /*remove the attribute, and call this function once more:*/
+                  elmnt.removeAttribute("w3-include-html");
+                  includeHTML();
+                }
+              }      
+              xhttp.open("GET", file, true);
+              xhttp.send();
+              /*exit the function:*/
+              return;
+            }
+          }
+        };
+</script>    
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>{% block title %}Chat Application{% endblock %}</title>
+    {% load static %}
+    <link rel="stylesheet" href="{% static 'chat/chat.css' %}">
+</head>
+<body>
+    <header>
+        <div class="navbar">
+            <a href="{% url 'index' %}" class="nav-link">Home</a>
+            {% if user.is_authenticated %}
+                <div>
+                    <a href="{% url 'user_list' %}" class="nav-link">Users</a>
+                    <a href="{% url 'chat_view' user.username %}" class="nav-link">Chat</a>
+                    
+                    <form action="{% url 'logout' %}" method="post" class="logout-form">
+                        {% csrf_token %}
+                        <button type="submit" class="logout-button">Logout</button>
+                    </form>
+                </div>
+            {% else %}
+                <div>
+                    <a href="{% url 'login' %}" class="nav-link">Login</a>
+                    <a href="{% url 'register' %}" class="nav-link">Register</a>
+                </div>
+            {% endif %}
+        </div>
+    </header>
+    <div class="container">
+        <div w3-include-html="user_list.html"></div> 
+        
+
+        {% block content %}{% endblock %}
+    </div>
+</body>
+</html>
