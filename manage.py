@@ -17,6 +17,7 @@ def main():
         ) from exc
     execute_from_command_line(sys.argv)
 
+web: gunicorn chat_project.wsgi --log-file -
 
 if __name__ == '__main__':
     main()
